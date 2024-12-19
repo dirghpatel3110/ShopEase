@@ -58,7 +58,7 @@ body {
   /* Product Image */
   .product-image {
     width: 100%;
-    height: auto; /* Adjust height automatically to maintain aspect ratio */
+    height: 300px; /* Adjust height automatically to maintain aspect ratio */
   }
   
   /* Animation */
