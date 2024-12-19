@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios
 import Navbar from './Navbar'; 
 import '../CSS/ProductDetails.css'; 
 
 const ProductDetails = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const product = location.state?.product; // Get the product data passed via state
   const [quantity, setQuantity] = useState(0); // Quantity of the main product
   const [accessoryQuantities, setAccessoryQuantities] = useState(
@@ -42,6 +44,53 @@ const ProductDetails = () => {
   const handleWarrantyChange = (e) => {
     setWarranty(e.target.checked);
   };
+
+  // Handle Add to Cart button click
+  // Handle Add to Cart button click
+const handleAddToCart = async () => {
+    // const { totalAfterDiscount } = calculateTotal();
+  
+    // Retrieve the email from localStorage
+    const email = localStorage.getItem('email');
+  
+    // Check if email exists
+    if (!email) {
+      alert('User email is not available. Please log in.');
+      return;
+    }
+  
+    // Prepare the cart data to send to the API
+    const cartData = {
+        email, // Ensure email is included
+        id: product.id, // Required product id
+        name: product.name, // Product name
+        originalPrice: product.price, // Original price
+        discountedPrice: calculateTotal().discount, // Discounted price
+        totalAmount: calculateTotal().totalAfterDiscount, // Total amount
+        category: product.category, // Product category
+        quantity,
+        accessories: product.accessories.map((accessory, index) => ({
+          id: accessory.id,
+          name: accessory.name,
+          price: accessory.price,
+          quantity: accessoryQuantities[index],
+        }))
+        .filter((accessory) => accessory.quantity > 0),
+      };
+      
+  
+    try {
+      // Send POST request to Cart API
+      await axios.post('http://localhost:5001/api/auth/cart', cartData);
+  
+      // Redirect to cart page after successful API call
+      navigate('/cart');
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Failed to add items to the cart. Please try again.');
+    }
+  };
+  
 
   const { totalAfterDiscount, discount } = calculateTotal();
 
@@ -123,7 +172,7 @@ const ProductDetails = () => {
             </h3>
           </div>
           <div className="total-right">
-            <button className="add-to-cart-button">Add to Cart</button>
+            <button className="add-to-cart-button" onClick={handleAddToCart}>Add to Cart</button>
           </div>
         </div>
       </div>
