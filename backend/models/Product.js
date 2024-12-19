@@ -67,7 +67,10 @@ image: {
     type: String, 
     required: true 
 },
-accessories: [accessorySchema], // Array of subdocuments
+accessories: {
+    type: [accessorySchema],
+    required: false,
+}, 
 });
 
 // Export the Product model

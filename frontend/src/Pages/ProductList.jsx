@@ -175,7 +175,7 @@ export default function ProductList() {
       ...editedProduct,
       accessories: [...editedProduct.accessories, newAccessory]
     });
-    setNewAccessory({ name: '', price: '', description: '' });
+    setNewAccessory({ id: '', name: '', price: '', description: '' });
   };
 
   const submitEdit = (e) => {
@@ -275,9 +275,11 @@ export default function ProductList() {
             <p><strong>Price:</strong> ${selectedProduct.price}</p>
             <p><strong>Description:</strong> {selectedProduct.description}</p>
             <p><strong>Category:</strong> {selectedProduct.category}</p>
+            <p><strong>Image:</strong>{selectedProduct.image}</p>
             <p><strong>Warranty:</strong> ${selectedProduct.warranty_price}</p>
             <p><strong>Retailer-Special-Discounts:</strong> ${selectedProduct.retailer_special_discounts}</p>
             <p><strong>Manufacturer-Rebate:</strong> ${selectedProduct.manufacturer_rebates}</p>
+            <p><strong>AvailableItems:</strong>{selectedProduct.availableItems}</p>
             <br />
             <h3>Accessories:</h3>
             {selectedProduct.accessories.map((accessory, index) => (
@@ -362,6 +364,8 @@ export default function ProductList() {
           <input type="text" name="description" value={editedProduct.description} onChange={handleInputChange} />
           <label>Category</label>
           <input type="text" name="category" value={editedProduct.category} onChange={handleInputChange} />
+          <label>Image</label>
+          <input type="text" name="image" value={editedProduct.image} onChange={handleInputChange} />
           <label>Warranty</label>
           <input type="text" name="warranty_price" value={editedProduct.warranty_price} onChange={handleInputChange}/>
           <label>Retailer-Special-Discounts</label>
@@ -369,7 +373,8 @@ export default function ProductList() {
 } onChange={handleInputChange} />
           <label>Manufacturer-Rebate</label>
           <input type="text" name="manufacturer_rebates" value={editedProduct.manufacturer_rebates} onChange={handleInputChange} />
-          
+          <label>AvailableItems</label>
+          <input type="text" name="availableItems" value={editedProduct.availableItems} onChange={handleInputChange} />
           <h3>Edit Accessories:</h3>
           {editedProduct.accessories.map((accessory, index) => (
             <div key={index}>
@@ -405,6 +410,13 @@ export default function ProductList() {
           ))}
 
           <h3>Add New Accessory:</h3>
+          <input
+            type="text"
+            placeholder="Accessory Id"
+            name="id"
+            value={newAccessory.id}
+            onChange={(e) => setNewAccessory({ ...newAccessory, id: e.target.value })}
+          />
           <input
             type="text"
             placeholder="Accessory Name"
