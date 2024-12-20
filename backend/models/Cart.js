@@ -20,35 +20,35 @@ const accessorySchema = new mongoose.Schema({
 const cartSchema = new mongoose.Schema({
   id: { 
     type: String, 
-    required: true 
+    required: false 
 }, // Product ID
   name: { 
     type: String, 
-    required: true 
+    required: false 
 },
 email: { 
     type: String, 
-    required: true 
+    required: false 
 }, // Product Name
   originalPrice: { 
     type: Number, 
-    required: true 
+    required: false 
 }, // Original Price of Product
   discountedPrice: { 
     type: Number, 
-    required: true 
+    required: false 
 }, // Discounted Price of Product
   quantity: { 
     type: Number, 
-    required: true 
+    required: false 
 }, // Quantity of Product
   totalAmount: { 
     type: Number, 
-    required: true 
+    required: false 
 }, // Total Amount (including accessories)
   category: { 
     type: String, 
-    required: true 
+    required: false 
 }, // Product Category
   accessories: {
     type: [accessorySchema] ,

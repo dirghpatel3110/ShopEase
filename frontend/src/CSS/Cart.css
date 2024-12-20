@@ -1,0 +1,143 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+  }
+  
+  .cart-page {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .cart-page p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  /* Order Table */
+  .order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .order-table thead {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .order-table th, .order-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border: 1px solid #dee2e6;
+  }
+  
+  .order-table th {
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .order-table tbody .cart-item:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .order-table .accessory-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .order-table .accessory-item {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  /* Buttons */
+  /* button {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  } */
+  
+  .cancel-button {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .cancel-button:hover {
+    background-color: #c82333;
+  }
+  
+  .clear-cart-button {
+    background-color: #ffc107;
+    color: #333;
+    margin-right: 10px;
+  }
+  
+  .clear-cart-button:hover {
+    background-color: #e0a800;
+  }
+  
+  .proceed-checkout {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .proceed-checkout:hover {
+    background-color: #218838;
+  }
+  
+  /* Total Amount Section */
+  .total-amount {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 20px;
+  }
+  
+  .check {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .check button {
+    flex: 1;
+    min-width: 150px;
+    margin: 5px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .order-table th, .order-table td {
+      font-size: 0.9rem;
+      padding: 8px;
+    }
+  
+    .total-amount {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+  
+    .check {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .check button {
+      margin-bottom: 10px;
+    }
+  }
+  

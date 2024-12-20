@@ -5,6 +5,7 @@ import Login from './Pages/Login';
 import Product from './Pages/Product';
 import ProductList from './Pages/ProductList';
 import ProductDetails from './Pages/ProductDetails';
+import Cart from './Pages/Cart';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
       <Route exact path="/product" element={<Product/>} />
       <Route exact path="/product/:id" element={<ProductDetails/>} />
       <Route exact path="/product-list" element={<ProductList/>} />
+      <Route exact path="/cart" element={<Cart/>}/>
       </Routes>
       </BrowserRouter>
     </div>
