@@ -21,6 +21,7 @@ app.use("/api/auth",require("./routes/signup") );
 app.use("/api/auth",require("./routes/login"));
 app.use("/api/auth",require("./routes/products"));
 app.use("/api/auth",require("./routes/cart"));
+app.use("/api/auth",require("./routes/store"));
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
