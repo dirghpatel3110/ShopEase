@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import "../CSS/Cart.css";
 import axios from 'axios';
 import Navbar from './Navbar';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([]); // State to store cart items
-  const [totalAmount, setTotalAmount] = useState(0); // State to store total amount
-  const userEmail = localStorage.getItem('email'); // Get logged-in user's email from local storage
+  const [cartItems, setCartItems] = useState([]); 
+  const [totalAmount, setTotalAmount] = useState(0); 
+  const userEmail = localStorage.getItem('email'); 
+  const navigate = useNavigate();
 
   // Fetch cart items on component mount
   useEffect(() => {
@@ -29,12 +31,12 @@ const Cart = () => {
     const total = items.reduce((acc, item) => acc + item.totalAmount, 0);
     setTotalAmount(total);
   };
+
   // Handle cancel order
   const handleCancelOrder = (id) => {
     axios
       .delete(`http://localhost:5001/api/auth/cart/${id}`) // Use the correct endpoint with :id
       .then((response) => {
-        // Log success message from the backend
         console.log(response.data.message);
   
         // Remove the deleted item from the cartItems state
@@ -48,7 +50,7 @@ const Cart = () => {
         console.error("Error canceling order:", error);
       });
   };
-  
+
   // Handle clearing all cart items for the user
   const handleClearCart = () => {
     axios.delete(`http://localhost:5001/api/auth/cart?email=${userEmail}`)
@@ -64,8 +66,7 @@ const Cart = () => {
 
   // Handle checkout action
   const handleCheckOut = () => {
-    alert('Proceeding to checkout...');
-    // Add your checkout logic here
+    navigate('/transaction', { state: { cartItems, totalAmount } }); // Pass cart data to Transaction page
   };
 
   return (
