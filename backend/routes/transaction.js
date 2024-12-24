@@ -2,6 +2,8 @@ const express = require('express');
 const Transaction = require('../models/Transaction');
 const Cart = require('../models/Cart');
 const Store = require('../models/Store');
+const OrderItem = require('../models/OrderItem'); // OrderItem model
+
 
 const router = express.Router();
 
@@ -9,56 +11,123 @@ const generateOrderId = () => {
     return `ORD-${Math.floor(Math.random()*90000) + 10000}`;
 }
 
-router.post('/transactions', async(req,res)=> {
+// router.post('/transactions', async(req,res)=> {
 
-    try {
-        const { deliveryOption, name, email, city, state, zipCode, creditCardNumber, cvv, cartId, storeId } = req.body;
+//     try {
+//         const { deliveryOption, name, email, city, state, zipCode, creditCardNumber, cvv, cartId, storeId } = req.body;
 
-        if (!deliveryOption || !name || !email || !city || !state || !zipCode || !creditCardNumber || !cvv || !cartId) {
-            return res.status(400).json({ message: 'All required fields must be provided.' });
-          }
+//         if (!deliveryOption || !name || !email || !city || !state || !zipCode || !creditCardNumber || !cvv || !cartId) {
+//             return res.status(400).json({ message: 'All required fields must be provided.' });
+//           }
 
-        const orderId = generateOrderId();
+//         const orderId = generateOrderId();
 
-        const orderDeliveryDate = new Date();
-        orderDeliveryDate.setDate(orderDeliveryDate.getDate() + 15);
+//         const orderDeliveryDate = new Date();
+//         orderDeliveryDate.setDate(orderDeliveryDate.getDate() + 15);
 
-        const newTransactionData = {
-            deliveryOption,
-            name,
-            email,
-            city,
-            state,
-            zipCode,
-            creditCardNumber,
-            cvv,
-            orderCreatedDate: new Date(),
-            orderId,
-            orderDeliveryDate,
-            orderStatus: 'Pending',
-            cartId: Array.isArray(cartId) ? cartId : [cartId], // Ensure cartId is stored as an array
-          };
+//         const newTransactionData = {
+//             deliveryOption,
+//             name,
+//             email,
+//             city,
+//             state,
+//             zipCode,
+//             creditCardNumber,
+//             cvv,
+//             orderCreatedDate: new Date(),
+//             orderId,
+//             orderDeliveryDate,
+//             orderStatus: 'Pending',
+//             cartId: Array.isArray(cartId) ? cartId : [cartId], // Ensure cartId is stored as an array
+//           };
 
-          if (deliveryOption.toLowerCase() === 'pickup') {
-            if (!storeId) {
-              return res.status(400).json({ message: 'Store ID is required for pickup delivery option.' });
-            }
-            newTransactionData.storeId = Array.isArray(storeId) ? storeId : [storeId]; // Ensure storeId is stored as an array
-          }
+//           if (deliveryOption.toLowerCase() === 'pickup') {
+//             if (!storeId) {
+//               return res.status(400).json({ message: 'Store ID is required for pickup delivery option.' });
+//             }
+//             newTransactionData.storeId = Array.isArray(storeId) ? storeId : [storeId]; // Ensure storeId is stored as an array
+//           }
         
-          const newTransaction = new Transaction(newTransactionData);
-          const savedTransaction = await newTransaction.save();
+//           const newTransaction = new Transaction(newTransactionData);
+//           const savedTransaction = await newTransaction.save();
 
-          res.status(201).json({
-            message:"Transation created successfully",
-            transaction: savedTransaction,
-          });
+//           res.status(201).json({
+//             message:"Transation created successfully",
+//             transaction: savedTransaction,
+//           });
 
+//     } catch (error) {
+//         console.log("error creating transactions", error);
+//         res.status(500).json({message: "internal server error", error});
+//     }
+// });
+
+router.post('/transactions', async (req, res) => {
+    try {
+      const { deliveryOption, name, email, city, state, zipCode, creditCardNumber, cvv, cartId, storeId } = req.body;
+  
+      if (!deliveryOption || !name || !email || !creditCardNumber || !cvv || !cartId) {
+        return res.status(400).json({ message: 'All required fields must be provided.' });
+      }
+  
+      const orderId = generateOrderId();
+      const orderDeliveryDate = new Date();
+      orderDeliveryDate.setDate(orderDeliveryDate.getDate() + 15);
+  
+      // Create the transaction object
+      const newTransactionData = {
+        deliveryOption,
+        name,
+        email,
+        city,
+        state,
+        zipCode,
+        creditCardNumber,
+        cvv,
+        orderCreatedDate: new Date(),
+        orderId,
+        orderDeliveryDate,
+        orderStatus: 'Pending',
+        cartId: Array.isArray(cartId) ? cartId : [cartId],
+      };
+  
+      if (deliveryOption.toLowerCase() === 'pickup') {
+        if (!storeId) {
+          return res.status(400).json({ message: 'Store ID is required for pickup delivery option.' });
+        }
+        newTransactionData.storeId = Array.isArray(storeId) ? storeId : [storeId];
+      }
+  
+      // Save the transaction to the database
+      const newTransaction = new Transaction(newTransactionData);
+      const savedTransaction = await newTransaction.save();
+  
+      // Copy cart data into OrderItems table
+      const cartItems = await Cart.find({ _id: { $in: cartId } });
+  
+      const orderItemsData = cartItems.map((cartItem) => ({
+        transactionId: savedTransaction._id,
+        cartId: cartItem._id,
+        id: cartItem.id,
+        productName: cartItem.name,
+        quantity: cartItem.quantity,
+        price: cartItem.discountedPrice,
+        totalPrice: cartItem.totalAmount,
+        accessories: cartItem.accessories || [],
+      }));
+  
+      await OrderItem.insertMany(orderItemsData);
+  
+      res.status(201).json({
+        message: 'Transaction created successfully!',
+        transaction: savedTransaction,
+      });
     } catch (error) {
-        console.log("error creating transactions", error);
-        res.status(500).json({message: "internal server error", error});
+      console.error('Error creating transaction:', error.message);
+      res.status(500).json({ message: 'Internal server error', error });
     }
-});
+  });
+  
 
 // Get all transactions/orders
 router.get('/transactions', async (req, res) => {
