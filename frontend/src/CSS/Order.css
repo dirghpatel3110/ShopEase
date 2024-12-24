@@ -1,0 +1,296 @@
+body {
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  p {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .list-product1 {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .listproduct-format-main1 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .listproduct-format-main1 p {
+    margin: 0;
+  }
+  
+  .listproduct-item {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+  }
+  
+  .listproduct-item p {
+    margin: 0;
+  }
+  
+  .listproduct-item:last-child {
+    border-bottom: none;
+  }
+  
+  .update-order,
+  .remove-button {
+    margin-left: 60px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: 2px solid #007bff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 120px;
+    text-align: center;
+    font-size: 14px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  .update-order:hover,
+  .remove-button:hover {
+    background-color: white;
+    color: #007bff;
+    border-color: #007bff;
+  }
+  
+  .update-order:disabled,
+  .remove-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    border-color: #ccc;
+    color: #666;
+    box-shadow: none;
+  }
+  
+  .confirmation-pop1,
+  .update-pop1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .confirmation-pop-content1,
+  .update-pop-content1 {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .confirmation-pop-content1 p,
+  .update-pop-content1 p {
+    margin-bottom: 20px;
+  }
+  
+  .cancel-button,
+  .confirm-button {
+    padding: 10px 18px;
+    margin: 0 10px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cancel-button {
+    background-color: #dc3545;
+    color: white;
+    border: 2px solid #dc3545;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  .cancel-button:hover {
+    background-color: white;
+    color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  .confirm-button {
+    background-color: #28a745;
+    color: white;
+    border: 2px solid #28a745;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  .confirm-button:hover {
+    background-color: white;
+    color: #28a745;
+    border-color: #28a745;
+  }
+  
+  .update-pop-content1 select {
+    padding: 8px 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .update-pop-content1 select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  @media (max-width: 768px) {
+    .listproduct-format-main1,
+    .listproduct-item {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  
+    .listproduct-item {
+      grid-template-rows: repeat(2, auto);
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+  
+    .listproduct-item p {
+      padding: 5px 0;
+    }
+  }
+  
+  @media (max-width: 500px) {
+    .listproduct-format-main1,
+    .listproduct-item {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .Acc {
+    display: flex;
+    margin: 30px;
+    justify-content: end;
+    margin-right: 140px;
+  }
+  
+  .create-account-pop1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .create-account-pop-content1 {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .create-account-pop-content1 h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+  }
+  
+  .create-account-pop-content1 input {
+    width: 94%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .create-account-pop-content1 .cancel-button,
+  .create-account-pop-content1 .confirm-button {
+    width: 95%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .create-account-pop-content1 .cancel-button {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .create-account-pop-content1 .confirm-button {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .create-account-pop-content1 .cancel-button:hover,
+  .create-account-pop-content1 .confirm-button:hover {
+    opacity: 0.9;
+  } 
+
+
+  .confirm-pop {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: rgba(0,0,0,0.25) 0px 4px 12px;
+  }
+  
+  .confirm-pop-content h3 {
+    margin-bottom: 10px;
+  }
+  
+  .popup-actions button {
+    margin-right: 10px;
+  }
+  
+  .popup-actions button:first-child {
+    background-color: #dc3545; /* Red for Remove */
+  }
+  
+  .popup-actions button:last-child {
+    background-color: #6c757d; /* Gray for Cancel */
+  }
+  
+  
+  
+  
+    
+  
+  
+  
+    
+  
+    

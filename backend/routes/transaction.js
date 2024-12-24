@@ -167,25 +167,38 @@ router.get('/transactions', async (req, res) => {
     }
   });
 
-  router.delete("/transactions/:id", async (req, res) => {
-    const { id } = req.params;
+  router.delete("/transactions/:orderId", async (req, res) => {
+    const { orderId } = req.params; // Extract orderId from URL parameters
   
     try {
-      const deletedItem = await Transaction.findByIdAndDelete(id);
-      if (!deletedItem) {
+      // Find and delete the transaction by orderId
+      const deletedTransaction = await Transaction.findOneAndDelete({ orderId });
+  
+      if (!deletedTransaction) {
         return res.status(404).send({ error: "Transaction item not found" });
       }
-      res.status(200).send({ message: "Transaction item deleted successfully" });
+  
+      // Delete associated order items using the transactionId
+      const deletedOrderItems = await OrderItem.deleteMany({
+        transactionId: deletedTransaction._id, // Use the _id of the deleted transaction
+      });
+  
+      res.status(200).send({
+        message: "Transaction item and associated order items deleted successfully",
+        deletedTransaction,
+        deletedOrderItems,
+      });
     } catch (error) {
-      console.error("Error deleting Transaction item:", error); // Log the full error
-      res.status(500).send({ error: "Failed to delete Transaction item" });
+      console.error("Error deleting Transaction item and order items:", error); // Log the full error
+      res.status(500).send({ error: "Failed to delete Transaction item and associated order items" });
     }
   });
+  
 
   // Update order status by _id
-router.put('/transactions/:id', async (req, res) => {
+  router.put('/transactions/:orderId', async (req, res) => {
     try {
-      const { id } = req.params; // Extract _id from URL parameters
+      const { orderId } = req.params; // Extract orderId from URL parameters
       const { orderStatus } = req.body; // Extract the new orderStatus from the request body
   
       // Validate required fields
@@ -193,9 +206,9 @@ router.put('/transactions/:id', async (req, res) => {
         return res.status(400).json({ message: 'Order status is required.' });
       }
   
-      // Find the transaction by _id and update its status
-      const updatedTransaction = await Transaction.findByIdAndUpdate(
-        id, // Find transaction by _id
+      // Find the transaction by orderId and update its status
+      const updatedTransaction = await Transaction.findOneAndUpdate(
+        { orderId }, // Find transaction by orderId
         { orderStatus }, // Update the orderStatus field
         { new: true } // Return the updated document
       );
@@ -213,6 +226,7 @@ router.put('/transactions/:id', async (req, res) => {
       res.status(500).json({ message: 'Internal server error', error });
     }
   });
+  
   
 
 module.exports = router;

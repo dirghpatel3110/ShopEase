@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import "../CSS/Transaction.css";
 import axios from 'axios';
+import Navbar from './Navbar';
 
 const Transaction = () => {
   const location = useLocation();
@@ -62,13 +63,11 @@ const handleSubmit = async (e) => {
       // Call backend API to create a transaction
       const response = await axios.post('http://localhost:5001/api/auth/transactions', payload);
   
-      alert('Transaction created successfully!');
+      alert('order successfully done!');
       console.log(response.data);
   
       // Clear the cart after successful transaction
       await axios.delete(`http://localhost:5001/api/auth/cart?email=${formData.email}`);
-      
-      alert('Cart cleared successfully!');
     } catch (error) {
       console.error('Error creating transaction:', error);
       alert('Failed to create transaction.');
@@ -77,6 +76,8 @@ const handleSubmit = async (e) => {
   
 
   return (
+    <>
+    <Navbar/>
     <div>
       <h1>Complete Your Transaction</h1>
 
@@ -153,6 +154,7 @@ const handleSubmit = async (e) => {
       {/* Display Total Amount */}
       <h3>Total Amount: ${totalAmount.toFixed(2)}</h3>
     </div>
+    </>
   );
 };
 
