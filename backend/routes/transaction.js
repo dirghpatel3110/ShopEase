@@ -109,6 +109,7 @@ router.post('/transactions', async (req, res) => {
         transactionId: savedTransaction._id,
         cartId: cartItem._id,
         id: cartItem.id,
+        email: cartItem.email,
         productName: cartItem.name,
         quantity: cartItem.quantity,
         price: cartItem.discountedPrice,

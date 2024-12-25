@@ -50,7 +50,7 @@ export default function Order() {
 
       // Fetch order items for a specific customer using email
       axios
-        .get(`http://localhost:5001/api/auth/order-items?email=${email}`)
+        .get(`http://localhost:5001/api/auth/user-orders?email=${email}`)
         .then((response) => {
           if (response.data && response.data.length > 0) {
             setProducts(response.data);

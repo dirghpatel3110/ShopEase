@@ -13,6 +13,7 @@ const orderItemSchema = new mongoose.Schema({
     required: true,
   },
   id: {type: String, required:true},
+  email: {type: String, required:true},
   productName: { type: String, required: true },
   quantity: { type: Number, required: true },
   price: { type: Number, required: true},

@@ -274,14 +274,14 @@ body {
   
   .popup-actions button {
     margin-right: 10px;
-  }
+  } 
   
   .popup-actions button:first-child {
-    background-color: #dc3545; /* Red for Remove */
+    background-color: #28a745; /* Red for Remove */
   }
   
   .popup-actions button:last-child {
-    background-color: #6c757d; /* Gray for Cancel */
+    background-color: #dc3545; /* Gray for Cancel */
   }
   
   

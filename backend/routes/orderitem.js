@@ -1,5 +1,6 @@
 const express = require('express');
-const OrderItem = require('../models/OrderItem'); // Import the OrderItem model
+const OrderItem = require('../models/OrderItem'); 
+const Transaction = require("../models/Transaction");// Import the OrderItem model
 
 const router = express.Router();
 
@@ -24,43 +25,36 @@ router.get('/order-items', async (req, res) => {
   }
 });
 
-router.get('/order-items', async (req, res) => {
+router.get('/user-orders', async (req, res) => {
     try {
-      const { email, transactionId } = req.query; // Query parameters for filtering
+      const { email } = req.query;
   
+      // Validate email
       if (!email) {
         return res.status(400).json({ message: 'Email is required.' });
       }
   
-      let orderItems;
+      // Query the orders for the specific email
+      const userOrders = await OrderItem.find({ email }).populate({
+        path: 'transactionId',
+        select: 'name email orderId orderDeliveryDate orderStatus',
+      });
   
-      if (transactionId) {
-        // Fetch order items for a specific transaction and email
-        orderItems = await OrderItem.find({ transactionId })
-          .populate({
-            path: 'transactionId',
-            match: { email }, // Filter transactions by email
-            select: 'orderId name email orderDeliveryDate orderStatus',
-          });
-      } else {
-        // Fetch all order items for a specific email
-        orderItems = await OrderItem.find()
-          .populate({
-            path: 'transactionId',
-            match: { email }, // Filter transactions by email
-            select: 'orderId name email orderDeliveryDate orderStatus',
-          });
+      // If no orders are found
+      if (userOrders.length === 0) {
+        return res.status(404).json({ message: 'No orders found for this user.' });
       }
   
-      // Filter out any null results (transactions that don't match the email)
-      orderItems = orderItems.filter((item) => item.transactionId !== null);
-  
-      res.status(200).json(orderItems);
+      // Return the user's orders
+      res.status(200).json(userOrders);
     } catch (error) {
-      console.error('Error fetching order items:', error.message);
+      console.error('Error fetching user orders:', error.message);
       res.status(500).json({ message: 'Internal server error', error });
     }
   });
+  
+  
+  
   
   
 
