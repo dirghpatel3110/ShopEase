@@ -1,0 +1,31 @@
+.product-sales-report {
+    margin: 20px;
+  }
+  
+  .product-sales-report h2 {
+    margin-bottom: 20px;
+  }
+  
+  .product-sales-report table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .product-sales-report th, .product-sales-report td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .product-sales-report th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .product-sales-report tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .product-sales-report tr:hover {
+    background-color: #f5f5f5;
+  }
