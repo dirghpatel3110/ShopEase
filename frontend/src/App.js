@@ -14,6 +14,7 @@ import ProductsWithRebates from './Pages/ProductsWithRebates';
 import ProductInventoryBarChart from './Pages/ProductInventoryBarChart';
 import ProductSalesReport from './Pages/ProductSalesReport';
 import ProductSalesBarChart from './Pages/ProductSalesBarChart';
+import DailySalesTransactions from './Pages/DailySalesTransactions';
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
       <Route path='/inventory/bar-chart' element={<ProductInventoryBarChart/>}/>
       <Route path='/sales-report/product-sold' element={<ProductSalesReport/>}/>
       <Route path='/sales-report/bar-chart' element={<ProductSalesBarChart/>}/>
+      <Route path='/sales-report/daily-transactions' element={<DailySalesTransactions/>}/>
       </Routes>
       </BrowserRouter>
     </div>

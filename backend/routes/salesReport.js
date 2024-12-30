@@ -11,7 +11,7 @@ router.get('/product-sales-report', async (req, res) => {
         $group: {
           _id: '$productName', // Group by product name
           productId: { $first: '$id' }, // Get the product ID
-          price: { $first: '$price' }, // Get the product price
+          price: { $first: '$price' },// Get the product price
           totalItemsSold: { $sum: '$quantity' }, // Sum of quantities sold
           totalSales: { $sum: { $multiply: ['$price', '$quantity'] } }, // Total sales (price * quantity)
         },
