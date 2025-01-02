@@ -129,5 +129,14 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Ignore Virtual Environment Folder
 /venv
+
+# Ignore Rasa cache and models
+.rasa/
+
+# Ignore Python bytecode files
+__pycache__/
+
+# Ignore Python Trained Model
 /rasa/models 
