@@ -89,3 +89,30 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+
+- intent: search
+  examples: |
+    - Tell me about FAISS.
+    - I want to know about Enterprise AI.
+    - What is Enterprise AI?
+    - Give me information about AI.
+    - Can you explain FAISS?
+    - I need details on Enterprise AI.
+    - What can you tell me about FAISS?
+    - Can you provide information on FAISS?
+    - Please explain Enterprise AI to me.
+    - Tell me something about FAISS.
+    - Who created you?
+    - Tell me about your creator.
+    - Can you tell me about your creator?
+    - Who built you?
+    - Who developed you?
+    - What is this bot about?
+    - Can you explain your purpose?
+    - Tell me more about yourself.
+    - What are you designed for?
+    - What is your functionality?
+    - Can you provide details about this bot?
+
+
+  

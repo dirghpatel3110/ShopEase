@@ -11,3 +11,8 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
+
+- rule: Trigger FAISS search when the user asks for information
+  steps:
+  - intent: search
+  - action: action_faiss_search
