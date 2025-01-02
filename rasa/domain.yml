@@ -2,15 +2,19 @@ version: "3.1"
 
 intents:
   - search
+  - goodbye
+  - bot_challenge
 
 actions:
-  - action_faiss_search
+  - action_milvus_search
 
 responses:
-  utter_default:
-    - text: "I'm sorry, I didn't understand that. Can you rephrase?"
+  utter_goodbye:
+    - text: "Goodbye! Have a great day!"
+
+  utter_iamabot:
+    - text: "I am a bot, here to assist you."
 
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
-

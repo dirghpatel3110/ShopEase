@@ -1,4 +1,11 @@
+# rasa
+# faiss-cpu==1.7.4
+# sentence-transformers==2.2.2
+# numpy==1.23.5
+
+
 rasa
-faiss-cpu==1.7.4
-sentence-transformers==2.2.2
-numpy==1.23.5
+rasa-sdk
+pymilvus==2.2.11 
+openai==0.27.8 
+numpy==1.23.5 

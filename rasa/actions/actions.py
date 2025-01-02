@@ -1,98 +1,182 @@
+# from typing import Any, Text, Dict, List
+# from rasa_sdk import Action, Tracker
+# from rasa_sdk.executor import CollectingDispatcher
+# from pymilvus import connections, Collection, utility
+# import openai
+# import numpy as np
+# from sklearn.preprocessing import normalize
+# import os
+# import logging
+
+# # Configure logging
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger(__name__)
+
+# # Set OpenAI API key securely (use environment variable for security)
+# openai.api_key = "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"
+
+# # Prevent threading issues on macOS or multithreaded environments
+# os.environ["OMP_NUM_THREADS"] = "1"
+# os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
+
+# class ActionMilvusSearch(Action):
+#     def name(self) -> Text:
+#         return "action_milvus_search"
+
+#     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+#         logger.info("Custom action 'action_milvus_search' triggered.")
+
+#         try:
+#             # Step 1: Connect to Milvus and load collection
+#             connections.connect("default", host="localhost", port="19530")
+#             collection_name = "rasa"
+
+#             if not utility.has_collection(collection_name):
+#                 raise ValueError(f"Collection '{collection_name}' does not exist in Milvus.")
+
+#             collection = Collection(collection_name)
+#             collection.load()
+
+#             # Step 2: Retrieve user query and validate it
+#             query = tracker.latest_message.get("text", "").strip()
+#             if not query:
+#                 dispatcher.utter_message(text="Please enter a valid query.")
+#                 return []
+
+#             logger.info(f"User query: {query}")
+
+#             # Step 3: Generate query embedding using OpenAI API and normalize it
+#             embedding_response = openai.Embedding.create(
+#                 input=[query],
+#                 model="text-embedding-ada-002"
+#             )
+#             query_embedding = np.array(embedding_response["data"][0]["embedding"]).reshape(1, -1).astype("float32")
+#             query_embedding = normalize(query_embedding, axis=1)
+
+#             # Step 4: Perform similarity search in Milvus with appropriate parameters
+#             search_params = {"metric_type": "IP", "params": {"nprobe": 10}}
+#             k = 3  # Number of top results to retrieve
+#             threshold = float(os.getenv("SIMILARITY_THRESHOLD", "0.5"))
+
+#             results = collection.search(
+#                 data=query_embedding,
+#                 anns_field="embedding",
+#                 param=search_params,
+#                 limit=k,
+#                 output_fields=["id", "title", "content"],  # Fetch metadata directly from Milvus fields
+#             )
+
+#             # Step 5: Process search results and filter by similarity score
+#             retrieved_docs = []
+#             for hits in results:
+#                 for hit in hits:
+#                     logger.info(f"Evaluating Document ID: {hit.id}, Similarity Score: {hit.score}")
+#                     if hit.score >= threshold:
+#                         retrieved_docs.append({
+#                             "id": hit.id,
+#                             "title": getattr(hit.entity, "title", "Untitled"),  # Use getattr to safely access fields
+#                             "content": getattr(hit.entity, "content", "No content available"),
+#                             "score": hit.score,
+#                         })
+#                     else:
+#                         logger.warning(f"Document ID {hit.id} below threshold.")
+
+
+#             if not retrieved_docs:
+#                 dispatcher.utter_message(text="Sorry, I couldn't find any relevant documents.")
+#                 return []
+
+#             # Step 6: Prepare GPT prompt with retrieved documents and generate response
+#             context = "\n\n".join([f"{doc['title']}: {doc['content']} (Score: {doc['score']:.2f})" for doc in retrieved_docs])
+            
+#             gpt_response = openai.ChatCompletion.create(
+#                 model="gpt-4o-mini",
+#                 messages=[
+#                     {"role": "system", "content": f"Use the following context:\n\n{context}"},
+#                     {"role": "user", "content": query},
+#                 ],
+#                 temperature=0.1,
+#                 max_tokens=300,
+#             )
+            
+#             response_text = gpt_response["choices"][0]["message"]["content"].strip()
+
+#         except Exception as e:
+#             logger.exception("Error in 'action_milvus_search':")
+#             response_text = f"An error occurred while processing your request."
+
+#         dispatcher.utter_message(text=response_text)
+#         return []
+
+
+
+
+
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-import faiss
-import json
-import numpy as np
-import openai
-import os
+from .milvus_utils import MilvusConnector, QueryEmbeddingGenerator, SimilaritySearchProcessor
 import logging
+import os
+import openai
 
-# Set OpenAI API key (replace with your actual API key)
-openai.api_key = "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"
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-# Environment variables to prevent threading issues (especially on macOS)
-os.environ["OMP_NUM_THREADS"] = "1"
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-
-class ActionFaissSearch(Action):
+class ActionMilvusSearch(Action):
     def name(self) -> Text:
-        return "action_faiss_search"
+        return "action_milvus_search"
 
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        logging.info("Custom action 'action_faiss_search' triggered.")
+        logger.info("Custom action 'action_milvus_search' triggered.")
 
         try:
-            # Load FAISS index and metadata
-            index_path = "faiss/faiss_index"
-            metadata_path = "faiss/metadata.json"
-            
-            if not os.path.exists(index_path):
-                raise FileNotFoundError(f"FAISS index not found at {index_path}")
-            if not os.path.exists(metadata_path):
-                raise FileNotFoundError(f"Metadata file not found at {metadata_path}")
+            # Step 1: Connect to Milvus and load collection using MilvusConnector class
+            milvus_connector = MilvusConnector()
+            collection = milvus_connector.connect_and_load()
 
-            index = faiss.read_index(index_path)
-            with open(metadata_path, "r") as meta_file:
-                metadata = json.load(meta_file)
-
-            # Get the user query from the tracker
-            query = tracker.latest_message.get("text")
-            logging.info(f"User query: {query}")
-
-            # Generate embeddings for the query using OpenAI's embedding model
-            embedding_response = openai.Embedding.create(
-                input=[query],  # Pass the input as a list
-                model="text-embedding-ada-002"  # Use the correct model name
-            )
-            query_embedding = np.array(embedding_response["data"][0]["embedding"]).astype("float32")
-            logging.info("Query embedding generated successfully.")
-
-            # Normalize the query embedding for cosine similarity search
-            faiss.normalize_L2(query_embedding.reshape(1, -1))
-
-            # Perform the FAISS search (retrieve top-k results)
-            k = 3  # Number of results to retrieve
-            distances, indices = index.search(query_embedding.reshape(1, -1), k)
-
-            # Fetch corresponding metadata for results
-            results = [metadata[idx] for idx in indices[0] if idx != -1]
-            logging.info(f"Search results: {results}")
-
-            # If no results are found, respond accordingly
-            if not results:
-                response_text = "Sorry, I couldn't find any relevant documents."
-                dispatcher.utter_message(text=response_text)
+            # Step 2: Retrieve user query and validate it
+            query = tracker.latest_message.get("text", "").strip()
+            if not query:
+                dispatcher.utter_message(text="Please enter a valid query.")
                 return []
 
-            # Combine retrieved documents into a single prompt for GPT-4
-            context = "\n\n".join([f"{result['title']}: {result['content']}" for result in results])
+            logger.info(f"User query: {query}")
+
+            # Step 3: Generate query embedding using QueryEmbeddingGenerator class
+            api_key = "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"  # Replace with secure storage method!
+            embedding_generator = QueryEmbeddingGenerator(api_key=api_key)
+            query_embedding = embedding_generator.generate_embedding(query)
+
+            # Steps 4 & 5: Perform similarity search and filter results using SimilaritySearchProcessor class
+            threshold = float(os.getenv("SIMILARITY_THRESHOLD", "0.5"))
+            search_processor = SimilaritySearchProcessor(collection=collection, threshold=threshold)
+            retrieved_docs = search_processor.search_and_filter(query_embedding)
+
+            if not retrieved_docs:
+                dispatcher.utter_message(text="Sorry, I couldn't find any relevant documents.")
+                return []
+
+            # Step 6: Prepare GPT prompt with retrieved documents and generate response (unchanged)
+            context = "\n\n".join([f"{doc['title']}: {doc['content']} (Score: {doc['score']:.2f})" for doc in retrieved_docs])
             
-            # Use GPT-4 to generate a response based on the retrieved documents and user query
             gpt_response = openai.ChatCompletion.create(
                 model="gpt-4o-mini",
                 messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "You are a helpful assistant. Use the following context to answer the user's question:"
-                            f"\n\n{context}"
-                        ),
-                    },
+                    {"role": "system", "content": f"Use the following context:\n\n{context}"},
                     {"role": "user", "content": query},
                 ],
                 temperature=0.1,
                 max_tokens=300,
             )
-
-            # Extract the response text from GPT-4's output
+            
             response_text = gpt_response["choices"][0]["message"]["content"].strip()
-            logging.info("Response generated by GPT-4.")
 
         except Exception as e:
-            logging.exception("Error in 'action_faiss_search':")
-            response_text = f"An error occurred while processing your request: {str(e)}"
+            logger.exception("Error in 'action_milvus_search':")
+            response_text = f"An error occurred while processing your request."
 
-        # Send the response back to the user
         dispatcher.utter_message(text=response_text)
         return []

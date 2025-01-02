@@ -43,3 +43,10 @@
 
 action_endpoint:
   url: "http://localhost:5055/webhook"
+
+vector_store:
+  type: milvus
+  host: localhost
+  port: 19530
+  collection: rasa
+  threshold: 0.5  # Specify the minimum similarity score threshold (0 to 1)

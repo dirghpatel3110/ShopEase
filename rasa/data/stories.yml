@@ -1,10 +1,10 @@
 version: "3.1"
 
 stories:
-  - story: Search using FAISS
+  - story: Search using Milvus
     steps:
       - intent: search
-      - action: action_faiss_search
+      - action: action_milvus_search
 
 
 

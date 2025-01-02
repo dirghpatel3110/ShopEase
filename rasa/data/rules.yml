@@ -1,18 +1,17 @@
 version: "3.1"
 
 rules:
+  - rule: Trigger Milvus search when the user asks for information
+    steps:
+      - intent: search
+      - action: action_milvus_search
 
-- rule: Say goodbye anytime the user says goodbye
-  steps:
-  - intent: goodbye
-  - action: utter_goodbye
+  - rule: Say goodbye anytime the user says goodbye
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye
 
-- rule: Say 'I am a bot' anytime the user challenges
-  steps:
-  - intent: bot_challenge
-  - action: utter_iamabot
-
-- rule: Trigger FAISS search when the user asks for information
-  steps:
-  - intent: search
-  - action: action_faiss_search
+  - rule: Respond to bot challenge
+    steps:
+      - intent: bot_challenge
+      - action: utter_iamabot
