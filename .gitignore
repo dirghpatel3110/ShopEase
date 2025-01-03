@@ -140,3 +140,5 @@ __pycache__/
 
 # Ignore Python Trained Model
 /rasa-pro/models 
+
+/rasa-pro/volumes
