@@ -1,0 +1,12 @@
+flows:
+  check_order_status:
+      name: check order status
+      description: Flow to check order status by order id.
+      steps:
+
+        # Step 1: Collect the orderId slot
+        - collect: orderId
+          description: Order ID in the format of ORD - followed by number (e.g., ORD-12345)
+
+        # Step 2: Execute custom action to fetch and display the order status
+        - action: action_check_order_status

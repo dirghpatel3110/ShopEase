@@ -1,0 +1,23 @@
+recipe: default.v1
+language: en
+pipeline:
+  # - name: WhitespaceTokenizer
+  # - name: CountVectorsFeaturizer
+  # - name: DIETClassifier
+  # - name: EntitySynonymMapper
+  # - name: ResponseSelector
+  - name: NLUCommandAdapter
+  - name: SingleStepLLMCommandGenerator
+    llm:
+      model: gpt-4o-mini
+      # model_group: openai-gpt-4
+
+policies:
+  - name: FlowPolicy
+  - name: IntentlessPolicy
+    confidence_threshold_for_action_prediction: 0.9
+  - name: RulePolicy
+    core_fallback_threshold: 0.3
+    core_fallback_action_name: "action_default_fallback"
+
+assistant_id: 20250103-113841-radial-expression

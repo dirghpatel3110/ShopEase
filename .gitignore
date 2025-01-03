@@ -139,4 +139,4 @@ dist
 __pycache__/
 
 # Ignore Python Trained Model
-/rasa/models 
+/rasa-pro/models 

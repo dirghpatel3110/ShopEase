@@ -1,0 +1,33 @@
+version: "3.1"
+
+intents:
+  - affirm
+  - deny
+
+slots:
+  orderId:
+    type: text
+    mappings:
+      - type: from_llm
+
+  status:
+    type: text
+
+responses:
+  utter_ask_orderId:
+    - text: "Can you please provide your order ID?"
+
+  utter_confirm_checking_status:
+    - text: "Thank you! Let me check the status of your order."
+
+  utter_order_status:
+    - text: "The status of your order {orderId} is {status}."
+
+forms:
+  check_order_status:
+    required_slots:
+      - orderId
+
+actions:
+  - action_check_order_status
+  - validate_check_order_status_form
