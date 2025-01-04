@@ -1,0 +1,10 @@
+flows:
+  check_faq_shipping:
+      name: Check Shipping or Delivery Date
+      description: Flow to check either shipping or delivery date by order ID.
+      steps:
+        # Step 1: Collect the orderId slot
+        - collect: orderId
+
+        # Step 2: Execute custom action to fetch and display the shipping or delivery date
+        - action: action_check_faq_shipping

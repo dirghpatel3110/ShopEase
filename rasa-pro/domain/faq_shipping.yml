@@ -1,0 +1,34 @@
+version: "3.1"
+
+slots:
+  orderId:
+    type: text
+    mappings:
+      - type: from_llm
+
+  status:
+    type: text
+
+responses:
+  # utter_ask_orderId:
+  #   - text: "Can you please provide your order ID?"
+
+  utter_confirm_checking_shipping:
+    - text: "Thank you! Let me check the shipping date of your order."
+
+  utter_faq_shipping:
+    - text: "The shipping date of your order {orderId} is {status}."
+
+  utter_faq_delivered:
+    - text: "Your order {orderId} was delivered on {status}."
+
+  utter_faq_pending:
+    - text: "Your order {orderId} is pending and has not been shipped yet."
+
+forms:
+  check_faq_shipping:
+    required_slots:
+      - orderId
+
+actions:
+  - action_check_faq_shipping
