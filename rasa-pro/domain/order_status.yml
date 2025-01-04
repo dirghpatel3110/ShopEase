@@ -30,4 +30,5 @@ forms:
 
 actions:
   - action_check_order_status
+  - action_cancel_booking
   - validate_check_order_status_form

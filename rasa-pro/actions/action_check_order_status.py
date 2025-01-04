@@ -4,6 +4,7 @@ from rasa_sdk.events import SlotSet
 from pymongo import MongoClient
 from rasa_sdk.forms import FormValidationAction
 import re
+import requests
 
 
 class ActionCheckOrderStatus(Action):
@@ -41,6 +42,46 @@ class ActionCheckOrderStatus(Action):
                 text="I couldn't find an order with that ID. Please check and try again."
             )
             return [SlotSet("status", None)]
+        
+
+class ActionOrderCancellation(Action):
+    def name(self):
+        return "action_cancel_booking"
+    
+    def run(self, dispatcher: CollectingDispatcher, tracker, domain):
+        # Base URL for the API
+        base_url = "http://localhost:5001/api/auth/transactions"
+        
+        # Retrieve the order ID from the slot
+        order_id = tracker.get_slot('orderId')
+        
+        if not order_id:
+            dispatcher.utter_message(text="No order number provided. Please provide a valid order number.")
+            return []
+        
+        # Construct the URL for deleting the order
+        delete_url = f"{base_url}/{order_id}"
+        
+        try:
+            # Send a DELETE request to remove the order
+            delete_response = requests.delete(delete_url)
+            
+            if delete_response.status_code == 200:
+                # Order successfully deleted
+                dispatcher.utter_message(text="Your Product has been cancelled successfully.")
+            elif delete_response.status_code == 404:
+                # Order does not exist
+                dispatcher.utter_message(text="The provided order number does not exist in our system.")
+            else:
+                # Other errors (e.g., server error)
+                dispatcher.utter_message(text="Failed to cancel your product. Please try again later.")
+        
+        except requests.exceptions.RequestException as e:
+            # Handle any exceptions that occur during the request
+            dispatcher.utter_message(text="An error occurred while processing your request. Please try again later.")
+            print(f"Error: {e}")
+        
+        return []
 
 
 class ValidateCheckOrderStatusForm(FormValidationAction):

@@ -1,6 +1,6 @@
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.events import SlotSet
+from rasa_sdk.events import SlotSet, AllSlotsReset
 from pymongo import MongoClient
 import datetime
 
@@ -67,3 +67,15 @@ class ActionCheckFaqShipping(Action):
                 text="I couldn't find an order with that ID. Please check and try again."
             )
             return [SlotSet("status", None)]
+
+
+class ActionClearAllSlots(Action):
+    def name(self):
+        return "action_clear_all_slots"
+
+    def run(self, dispatcher: CollectingDispatcher, tracker, domain):
+        # Inform the user that all slots are being cleared
+        dispatcher.utter_message(text="All slots have been cleared.")
+        
+        # Reset all slots
+        return [AllSlotsReset()]
