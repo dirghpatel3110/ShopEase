@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 // Define Accessories Schema
 const accessorySchema = new mongoose.Schema({
   id: {
-    type: String,
+    type: Number,
     required: true,
   },
   name: {
@@ -22,55 +22,61 @@ const accessorySchema = new mongoose.Schema({
 
 // Define Product Schema
 const productSchema = new mongoose.Schema({
-id: { 
-    type: String, 
+  id: { 
+    type: Number, // Changed from String to Number to match JSON
     required: true, 
     unique: true 
-},
-name: { 
+  },
+  name: { 
     type: String, 
     required: true 
-},
-description: { 
+  },
+  description: { 
     type: String, 
     required: true 
-},
-price: { 
+  },
+  price: { 
     type: Number, 
     required: true 
-},
-retailer_special_discounts: { 
+  },
+  retailer_special_discounts: { 
     type: Number, 
-    required: false 
-},
-manufacturer_rebates: { 
+    default: 0 // Default value for optional field
+  },
+  manufacturer_rebates: { 
     type: Number, 
-    required: false 
-},
-warranty_price: { 
+    default: 0 // Default value for optional field
+  },
+  warranty_price: { 
     type: Number, 
-    required: false 
-},
-category: { 
+    default: 0 // Default value for optional field
+  },
+  category: { 
     type: String, 
     required: true 
-},
-likes: { 
+  },
+  likes: { 
     type: Number, 
     default: 0 
-},
-availableItems: { 
+  },
+  availableItems: { 
     type: Number, 
     required: true 
-},
-image: { 
+  },
+  image: { 
     type: String, 
-    required: true 
-},
-accessories: {
+    required: true,
+    validate: {
+      validator: function(v) {
+        return /^https?:\/\/.+\.(jpg|jpeg|png|webp|gif)$/i.test(v);
+      },
+      message: props => `${props.value} is not a valid image URL!`,
+    }
+  },
+  accessories: {
     type: [accessorySchema],
-    required: false,
-}, 
+    default: [], // Default to an empty array
+  },
 });
 
 // Export the Product model
