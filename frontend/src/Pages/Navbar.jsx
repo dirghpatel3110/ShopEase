@@ -71,7 +71,7 @@ const Navbar = () => {
     <div className='navbar'>
       <div className="nav-logo">
         <Link to="/product">
-          <p>SMARTHOMES</p>
+          <p>𝒮𝒽𝑜𝓅𝐸𝒶𝓈𝑒</p>
         </Link>
       </div>
       <div className="nav-login-cart">

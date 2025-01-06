@@ -30,25 +30,36 @@ router.post('/product-ai', async (req, res) => {
   try {
     const id = await generateRandomId();
 
-    // Prompt OpenAI to Generate Product Details
+    // Updated prompt for OpenAI to generate all product and accessory details
     const prompt = `
       Generate a JSON object for a unique product with the following structure:
       {
         "name": "string",
         "description": "string",
         "category": "string",
+        "price": "number",
+        "retailer_special_discounts": "number",
+        "manufacturer_rebates": "number",
+        "warranty_price": "number",
+        "likes": "number",
+        "availableItems": "number",
+        "image": "string",
         "accessories": [
           {
+            "id": "number",
             "name": "string",
-            "description": "string"
+            "description": "string",
+            "price": "number"
           }
         ]
       }
       Ensure:
-      - The product name, description, and all details are unique and creative.
-      - The accessories' name and description are also unique and related to the product.
-      - Only one accessory should be included in the response.
-      Do not include any additional explanation or text. Return only the JSON object.
+      - The product name, description, category, and all details are unique and creative.
+      - The price, discounts, rebates, warranty_price, likes, availableItems are all random but realistic values.
+      - Product must have only one accessories,
+      - Accessories should have a unique id(numeric), name, description, and price.
+      - The image should be a valid image URL.
+      - The response should be a valid JSON object with no additional text or explanation.
     `;
 
     const response = await openai.chat.completions.create({
@@ -64,7 +75,7 @@ router.post('/product-ai', async (req, res) => {
     let rawResponse = response.choices[0].message.content.trim();
 
     // Clean up the response by removing unwanted characters
-    rawResponse = rawResponse.replace(/^```json|\n```$/g, '').trim(); // Removes the code block markers
+    rawResponse = rawResponse.replace(/^```json|\n```$/g, '').trim();
 
     // Parse the cleaned-up response
     let generatedData;
@@ -76,34 +87,28 @@ router.post('/product-ai', async (req, res) => {
     }
 
     // Check if all necessary fields are present in the generated data
-    if (!generatedData.name || !generatedData.description || !generatedData.category || !generatedData.accessories) {
+    if (
+      !generatedData.name ||
+      !generatedData.description ||
+      !generatedData.category ||
+      typeof generatedData.price !== 'number' ||
+      !Array.isArray(generatedData.accessories)
+    ) {
       return res.status(400).json({ message: 'Incomplete product data returned by OpenAI' });
     }
 
-    // Prepare the product data
+    // Assign unique IDs to accessories if not already included
+    generatedData.accessories = generatedData.accessories.map((acc) => ({
+      id: acc.id || generateRandomId(),
+      ...acc,
+    }));
+
+    // Assign a unique ID to the product
     const productData = {
       id: id,
-      name: generatedData.name,
-      description: generatedData.description,
-      price: Math.floor(Math.random() * 500) + 50, // Random price between 50 and 550
-      retailer_special_discounts: Math.floor(Math.random() * 50), // Random discount
-      manufacturer_rebates: Math.floor(Math.random() * 30), // Random rebate
-      category: generatedData.category,
-      warranty_price: Math.floor(Math.random() * 100) + 20, // Random warranty price between 20 and 120
-      likes:  Math.floor(Math.random() * 200) + 5,
-      availableItems: Math.floor(Math.random() * 100) + 1, // Random stock between 1 and 100
-      image: `https://www.example.com/round-dining-table.jpg`, // Placeholder image
-      accessories: generatedData.accessories.map((acc) => ({
-        id: id,
-        name: acc.name,
-        description: acc.description,
-        price: Math.floor(Math.random() * 50) + 10, // Random accessory price between 10 and 60
-      })),
+      ...generatedData, // Use all generated fields from OpenAI
     };
-
-    // Save the Product to MongoDB
     const newProduct = new Product(productData);
-    await newProduct.save();
 
     res.status(200).json({
       success: true,
@@ -114,6 +119,7 @@ router.post('/product-ai', async (req, res) => {
     res.status(500).json({ message: 'Internal server error', error });
   }
 });
+
 
 
 // Create a new product

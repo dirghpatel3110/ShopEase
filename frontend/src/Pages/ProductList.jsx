@@ -229,6 +229,29 @@ export default function ProductList() {
         console.error('There was an error adding the product!', error);
       });
   };
+
+
+  const generateProductWithAI = () => {
+    axios
+      .post('http://localhost:5001/api/auth/product-ai')
+      .then(response => {
+        if (response.status === 200) {
+          const generatedProduct = response.data.data;
+  
+          // Update the form with generated product details
+          setNewProduct({
+            ...newProduct,
+            ...generatedProduct,
+            accessories: generatedProduct.accessories || [],
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Error generating product with AI:', error);
+        alert('There was an error generating the product. Please try again.');
+      });
+  };
+  
   
 
   return (
@@ -305,6 +328,9 @@ export default function ProductList() {
         overlayClassName="overlay"
       >
         <h2>Add Product</h2>
+        <button onClick={generateProductWithAI} style={{ marginBottom: '15px', backgroundColor: '#007bff', color: '#fff' }}>
+          Generate Product with AI
+        </button>
         <form onSubmit={submitAddProduct}>
         <label>Name</label>
         <input type="text" name="name" value={newProduct.name} onChange={handleNewProductInputChange} required />

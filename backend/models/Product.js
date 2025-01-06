@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// Define Accessories Schema
 const accessorySchema = new mongoose.Schema({
   id: {
     type: Number,
@@ -20,10 +19,9 @@ const accessorySchema = new mongoose.Schema({
   },
 });
 
-// Define Product Schema
 const productSchema = new mongoose.Schema({
   id: { 
-    type: Number, // Changed from String to Number to match JSON
+    type: Number, 
     required: true, 
     unique: true 
   },
@@ -41,15 +39,15 @@ const productSchema = new mongoose.Schema({
   },
   retailer_special_discounts: { 
     type: Number, 
-    default: 0 // Default value for optional field
+    default: 0 
   },
   manufacturer_rebates: { 
     type: Number, 
-    default: 0 // Default value for optional field
+    default: 0 
   },
   warranty_price: { 
     type: Number, 
-    default: 0 // Default value for optional field
+    default: 0 
   },
   category: { 
     type: String, 
@@ -75,9 +73,8 @@ const productSchema = new mongoose.Schema({
   },
   accessories: {
     type: [accessorySchema],
-    default: [], // Default to an empty array
+    default: [],  
   },
 });
 
-// Export the Product model
 module.exports = mongoose.model("Product", productSchema);
