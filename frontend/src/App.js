@@ -18,6 +18,7 @@ import DailySalesTransactions from './Pages/DailySalesTransactions';
 import OpenTicketPage from './Pages/OpenTicketPage';
 import TicketDecisionPage from './Pages/TicketDecisionPage';
 
+
 const App = () => {
   return (
     <div>

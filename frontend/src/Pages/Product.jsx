@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../CSS/ProductCard.css'; // Assuming styles for ProductCard
-import Navbar from './Navbar'; // Navbar component
+import Navbar from './Navbar';
+import Chatbot from './Chatbot'; // Navbar component
 //import SemanticSearch from './SemanticSearch'; // Semantic Search component
 //import SemanticReviews from './SemanticReviews'; // Semantic Reviews component
 
@@ -57,6 +58,7 @@ const Product = () => {
   return (
     <>
       <Navbar/>
+      <Chatbot/>
       <div className="product-container">
         <div className="set-btn">
           <div className="category-filter">

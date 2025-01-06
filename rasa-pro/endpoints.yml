@@ -44,8 +44,8 @@
 # For more details, refer to the documentation:
 # https://rasa.com/docs/rasa-pro/concepts/contextual-response-rephraser
 # To enable the rephraser, remove the comment symbols in the lines below.
-#nlg:
-#   type: rephrase
+nlg:
+  type: rephrase
 
 action_endpoint:
   url: "http://localhost:5055/webhook"
