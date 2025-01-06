@@ -1,16 +1,21 @@
 version: "3.1"
 
 nlu:
-  - intent: affirm
+  
+  - intent: greet
     examples: |
-      - Yes, that's correct.
-      - Yes, that's right.
-      - Yes, that's it.
-      - Yes
-
-  - intent: deny
-    examples: |
-      - No, that's not right.
-      - No, that's incorrect.
-      - No, that's not it.
-      - No
+      - hello
+      - hi
+      - hey
+      - good morning
+      - good afternoon
+      - good evening
+      - howdy
+      - what's up
+      - greetings
+      - hey there
+      - hi there
+      - hello there
+      - bye
+      - good bye
+      - take care

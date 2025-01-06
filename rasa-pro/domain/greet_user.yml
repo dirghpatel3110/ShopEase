@@ -1,0 +1,13 @@
+version: "3.1"
+
+intents:
+  - greet
+
+responses:
+  utter_greet:
+    - text: "Hello! How can I assist you today?"
+    - text: "Hi there! What can I do for you?"
+    - text: "Hey! How can I help?"
+
+actions:
+  - utter_greet

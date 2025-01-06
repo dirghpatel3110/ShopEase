@@ -1,9 +1,5 @@
 version: "3.1"
 
-intents:
-  - affirm
-  - deny
-
 slots:
   orderId:
     type: text
@@ -23,12 +19,19 @@ responses:
   utter_order_status:
     - text: "The status of your order {orderId} is {status}."
 
-forms:
-  check_order_status:
-    required_slots:
-      - orderId
+  utter_confirm_checking_cancellation:
+    - text: "Thank you! Let me check your order."
+
+  utter_confirm_cancellation:
+    - text: "Your booking has been cancelled successfully."
 
 actions:
   - action_check_order_status
   - action_cancel_booking
   - validate_check_order_status_form
+
+forms:
+  check_order_status_form:
+    required_slots:
+      - orderId
+

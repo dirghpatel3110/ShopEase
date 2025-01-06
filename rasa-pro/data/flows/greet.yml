@@ -1,0 +1,8 @@
+flows:
+  greet_user:
+    name: "Greet the user"
+    description: "Greet the user when they say hello or goodbye."
+    nlu_trigger:
+      - intent: greet
+    steps:
+      - action: utter_greet

@@ -1,18 +1,23 @@
+version: "3.1"
+
 flows:
   check_order_status:
-      name: check order status
-      description: Flow to check order status by order id.
-      steps:
+    name: check_order_status
+    description: "Flow to check order status by order ID."
+
+    steps:
 
         # Step 1: Collect the orderId slot
         - collect: orderId
           description: Order ID in the format of ORD - followed by number (e.g., ORD-12345)
-
-        # Step 2: Execute custom action to fetch and display the order status
+        - action: utter_confirm_checking_status
         - action: action_check_order_status
 
   order_cancellation:
-      description: This flow will help user to cancel order
-      steps:
+    description: This flow will help user to cancel order
+    steps:
         - collect: orderId
+          description: Order ID in the format of ORD - followed by number (e.g., ORD-12345)
+        
+        - action: utter_confirm_checking_cancellation
         - action: action_cancel_booking
