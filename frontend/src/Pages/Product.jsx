@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import '../CSS/ProductCard.css'; // Assuming styles for ProductCard
+import '../CSS/ProductCard.css'; 
 import Navbar from './Navbar';
-import Chatbot from './Chatbot'; // Navbar component
-//import SemanticSearch from './SemanticSearch'; // Semantic Search component
-//import SemanticReviews from './SemanticReviews'; // Semantic Reviews component
+import Chatbot from './Chatbot'; 
 
 const Product = () => {
   const [products, setProducts] = useState([]);
@@ -18,17 +16,22 @@ const Product = () => {
 
   // Fetch products on component mount
   useEffect(() => {
-    axios.get('http://localhost:5001/api/auth/products')
-      .then((response) => {
-        setProducts(response.data);
-        setFilteredProducts(response.data); 
-        const uniqueCategories = [...new Set(response.data.map(product => product.category))];
-        setCategories(uniqueCategories);
-      })
-      .catch((error) => {
-        console.error('Error fetching products:', error);
-      });
-  }, []);
+    // If searchResults exist in the location state, use them
+    if (location.state && location.state.searchResults) {
+      setFilteredProducts(location.state.searchResults);
+    } else {
+      axios.get('http://localhost:5001/api/auth/products')
+        .then((response) => {
+          setProducts(response.data);
+          setFilteredProducts(response.data);
+          const uniqueCategories = [...new Set(response.data.map(product => product.category))];
+          setCategories(uniqueCategories);
+        })
+        .catch((error) => {
+          console.error('Error fetching products:', error);
+        });
+    }
+  }, [location.state]);
 
   // Handle category filter change
   const handleCategoryChange = (category) => {

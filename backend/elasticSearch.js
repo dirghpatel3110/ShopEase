@@ -47,15 +47,15 @@ const indexMappingProducts = {
           description: { type: 'text' }
         }
       },
-      "description_vector": {
-        "type": "dense_vector",
-        "dims": 1536,
-        "index": true,
-        "similarity": "cosine"
-}
+      product_vector: {
+        type: 'dense_vector',
+        dims: 1536,
+        index: false, 
+      }
     }
   }
 };
+
 
 // Function to create index in Elasticsearch
 const createElasticsearchIndex = async () => {
@@ -78,7 +78,7 @@ const generateEmbedding = async (text) => {
       'https://api.openai.com/v1/embeddings',
       {
         input: text,
-        model: 'text-embedding-ada-002'
+        model: 'text-embedding-3-small'
       },
       {
         headers: {
@@ -108,29 +108,40 @@ const pushProductsToElasticsearch = async () => {
         continue;
       }
 
+      const accessories = Array.isArray(product.accessories)
+    ? product.accessories.map(accessory => ({
+        id: accessory.id || 0,
+        name: accessory.name || 'Unknown',
+        price: accessory.price || 0,
+        description: accessory.description || ''
+      }))
+    : [];
+
       // Prepare product document for Elasticsearch
-      actions.push({
-        index: { _index: indexName, _id: product._id.toString() }
-      });
-      actions.push({
-        id: product.id || 0,
-        name: product.name || 'Unknown',
-        description: product.description || '',
-        price: product.price || 0.0,
-        retailer_special_discounts: product.retailer_special_discounts || 0,
-        manufacturer_rebates: product.manufacturer_rebates || 0,
-        warranty_price: product.warranty_price || 0.0,
-        category: product.category || 'Unknown',
-        likes: product.likes || 0,
-        availableItems: product.availableItems || 0,
-        image: product.image || '',
-        accessories: product.accessories || [],
-        description_vector: embedding
-      });
+      doc = {
+        index: indexName, 
+        id: product._id.toString(),
+        document :{
+          id: product.id || 0,
+          name: product.name || 'Unknown',
+          description: product.description || '',
+          price: product.price || 0.0,
+          retailer_special_discounts: product.retailer_special_discounts || 0,
+          manufacturer_rebates: product.manufacturer_rebates || 0,
+          warranty_price: product.warranty_price || 0.0,
+          category: product.category || 'Unknown',
+          likes: product.likes || 0,
+          availableItems: product.availableItems || 0,
+          image: product.image || '',
+          //accessories,
+          product_vector: embedding
+        }
+      }
+      var ll = await esClient.index(doc);
     }
 
     if (actions.length > 0) {
-      await esClient.bulk({ body: actions });
+      var ll= esClient.bulk({ body: actions });
       console.log(`Indexed ${actions.length / 2} products into Elasticsearch.`);
     } else {
       console.log('No products to index.');

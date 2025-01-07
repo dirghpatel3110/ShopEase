@@ -18,6 +18,7 @@ app.use(
   );
   
 app.use(express.json()); 
+app.use(express.urlencoded({ extended: true })); 
 
 // Create uploads folder if it doesn't exist
 if (!fs.existsSync('./uploads')) {
@@ -37,6 +38,7 @@ app.use("/api/auth",require("./routes/orderitem"));
 app.use("/api/auth",require("./routes/salesReport"));
 app.use("/api/auth",require("./routes/dailySales"));
 app.use("/api/auth",require("./routes/ticketRoutes"));
+app.use("/api/auth",require("./routes/elastic"));
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {

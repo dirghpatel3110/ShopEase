@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../CSS/Navbar.css';
 import cart_icon from '../Assets/cart_icon.png';
+import axios from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
@@ -9,6 +10,7 @@ const Navbar = () => {
   const [showInventoryOptions, setShowInventoryOptions] = useState(false);
   const [showSalesReportOptions, setShowSalesReportOptions] = useState(false);
   const [showCustomerServiceOptions, setShowCustomerServiceOptions] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -67,6 +69,33 @@ const Navbar = () => {
     { name: 'Status of a Ticket', path: '/customer-service/ticket-status' }
   ];
 
+  const handleSearchChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  // Handle search button click
+  const handleSearchSubmit = async () => {
+    if (!searchInput.trim()) {
+      alert('Please enter a search query.');
+      return;
+    }
+  
+    try {
+      console.log(`Searching for: ${searchInput}`);
+  
+      // Make a GET request to the backend API
+      const response = await axios.get('http://localhost:5001/api/auth/search', {
+        params: { query: searchInput },
+      });
+  
+      // Navigate to the Product page with search results
+      navigate('/product', { state: { searchResults: response.data.results } });
+      
+    } catch (error) {
+      console.error('Error during search:', error);
+      alert('Failed to perform search. Please try again.');
+    }
+  }; 
   return (
     <div className='navbar'>
       <div className="nav-logo">
@@ -74,6 +103,18 @@ const Navbar = () => {
           <p>𝒮𝒽𝑜𝓅𝐸𝒶𝓈𝑒</p>
         </Link>
       </div>
+      <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchInput}
+            onChange={handleSearchChange}
+            className="search-input"
+          />
+          <button onClick={handleSearchSubmit} className="search-button">
+            Search
+          </button>
+        </div>
       <div className="nav-login-cart">
         {role === "Salesman" && (
           <button
