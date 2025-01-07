@@ -54,8 +54,16 @@ const Product = () => {
       );
 
   // Handle product click to navigate to the product details page
-  const handleProductClick = (product) => {
-    navigate(`/product/${product.id}`, { state: { product } });
+  const handleProductClick = async (product) => {
+    try {
+      // Fetch product data from the API using axios
+      const response = await axios.get(`http://localhost:5001/api/auth/products/${product.id}`);
+  
+      // Navigate to the new route with the fetched product data
+      navigate(`/product/${product.id}`, { state: { product: response.data } });
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+    }
   };
 
   return (

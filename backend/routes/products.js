@@ -148,14 +148,19 @@ router.get('/products', async (req, res) => {
 // Get a single product by ID
 router.get('/products/:id', async (req, res) => {
   try {
+    // Find the product by its "id" field
     const product = await Product.findOne({ id: req.params.id });
-    if (!product) return res.status(404).json({ message: 'Product not found' });
-    res.status(200).json(product);
+    if (product) {
+      res.status(200).json(product);
+    } else {
+      res.status(404).json({ message: 'Product not found' });
+    }
   } catch (error) {
-    console.error('Error fetching product:', error.message);
-    res.status(500).json({ message: 'Internal server error', error });
+    console.error('Error fetching product:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 // Update a product by ID
 router.put('/products/:id', async (req, res) => {
