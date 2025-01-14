@@ -1,0 +1,11 @@
+flows:
+  buy_product:
+      name: Buy Product and Get Top 5 Products
+      description: Flow to handle user requests for buying a product and fetching the top 5 products.
+      steps:
+        # Step 1: Collect the productName slot
+        - collect: productName
+        - action: utter_ask_productName
+
+        # Step 2: Execute custom action to fetch and display the top 5 products
+        - action: action_get_top_products
