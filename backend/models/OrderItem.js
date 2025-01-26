@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Define OrderItem Schema
 const orderItemSchema = new mongoose.Schema({
   transactionId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -12,12 +11,30 @@ const orderItemSchema = new mongoose.Schema({
     ref: 'Cart',
     required: true,
   },
-  id: {type: String, required:true},
-  email: {type: String, required:true},
-  productName: { type: String, required: true },
-  quantity: { type: Number, required: true },
-  price: { type: Number, required: true},
-  totalPrice: { type: Number, required: true },
+  id: {
+    type: String, 
+    required:true
+  },
+  email: {
+    type: String, 
+    required:true
+  },
+  productName: { 
+    type: String, 
+    required: true 
+  },
+  quantity: { 
+    type: Number, 
+    required: true 
+  },
+  price: { 
+    type: Number, 
+    required: true
+  },
+  totalPrice: { 
+    type: Number, 
+    required: true 
+  },
   Date: { 
     type: Date, 
     default: Date.now,
