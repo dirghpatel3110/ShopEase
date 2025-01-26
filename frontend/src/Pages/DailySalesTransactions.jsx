@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import '../CSS/DailySalesTransactions.css';
-import Navbar from './Navbar';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "../CSS/DailySalesTransactions.css";
+import Navbar from "./Navbar";
 
 const DailySalesTransactions = () => {
   const [dailySales, setDailySales] = useState([]);
@@ -11,11 +11,13 @@ const DailySalesTransactions = () => {
   useEffect(() => {
     const fetchDailySales = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/auth/daily-sales-report');
+        const response = await axios.get(
+          "http://localhost:5001/api/auth/daily-sales-report"
+        );
         setDailySales(response.data);
         setLoading(false);
       } catch (err) {
-        setError('Error fetching daily sales data');
+        setError("Error fetching daily sales data");
         setLoading(false);
       }
     };
@@ -28,26 +30,26 @@ const DailySalesTransactions = () => {
 
   return (
     <>
-    <Navbar/>
-    <div className="daily-sales-transactions">
-      <h2>Daily Sales Transactions</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Total Sales</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dailySales.map((day, index) => (
-            <tr key={index}>
-              <td>{day.date}</td>
-              <td>${day.totalSales.toFixed(2)}</td>
+      <Navbar />
+      <div className="daily-sales-transactions">
+        <h2>Daily Sales Transactions</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Total Sales</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {dailySales.map((day, index) => (
+              <tr key={index}>
+                <td>{day.date}</td>
+                <td>${day.totalSales.toFixed(2)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };

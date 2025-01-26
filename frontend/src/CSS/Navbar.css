@@ -1,127 +1,129 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.inventory-dropdown, .sales-report-dropdown, .customer-service-dropdown {
-    position: relative;
-    display: inline-block;
+.inventory-dropdown,
+.sales-report-dropdown,
+.customer-service-dropdown {
+  position: relative;
+  display: inline-block;
 }
 
-.inventory-options, .sales-report-options, .customer-service-options {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+.inventory-options,
+.sales-report-options,
+.customer-service-options {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
 .inventory-dropdown:hover .inventory-options,
 .sales-report-dropdown:hover .sales-report-options,
 .customer-service-dropdown:hover .customer-service-options {
-    display: block;
+  display: block;
 }
 
-.inventory-options a, .sales-report-options a, .customer-service-options a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
+.inventory-options a,
+.sales-report-options a,
+.customer-service-options a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
 }
 
-.inventory-options a:hover, .sales-report-options a:hover, .customer-service-options a:hover {
-    background-color: #f1f1f1;
+.inventory-options a:hover,
+.sales-report-options a:hover,
+.customer-service-options a:hover {
+  background-color: #f1f1f1;
 }
 
 .nav-logo p {
-    font-size: 36px;
-    font-weight: bold;
-    color: #171717;
-    margin-left: 55px;
-    text-decoration: none;
+  font-size: 36px;
+  font-weight: bold;
+  color: #171717;
+  margin-left: 55px;
+  text-decoration: none;
 }
 
 .nav-logo a {
-    text-decoration: none;
-    color: inherit; 
+  text-decoration: none;
+  color: inherit;
 }
 
 .nav-login-cart {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    margin-right: 55px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-right: 55px;
 }
 
 .nav-login-cart button {
-    padding: 12px 20px;
-    border: 1px solid #d1d1d1;
-    border-radius: 50px;
-    background-color: #fff;
-    font-size: 18px;
-    color: #515151;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+  padding: 12px 20px;
+  border: 1px solid #d1d1d1;
+  border-radius: 50px;
+  background-color: #fff;
+  font-size: 18px;
+  color: #515151;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .nav-login-cart button:hover {
-    background-color: #f1f1f1;
-    color: #333;
+  background-color: #f1f1f1;
+  color: #333;
 }
 
 .nav-login-cart button.active {
-    background-color: #e3e3e3;
-    color: #007bff;
+  background-color: #e3e3e3;
+  color: #007bff;
 }
 
 .nav-login-cart img {
-    width: 40px;
-    cursor: pointer;
+  width: 40px;
+  cursor: pointer;
 }
 
-
-/* Search Bar Container */
 .search-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 400px; /* Adjust the width as needed */
-    margin: 10px auto; /* Center the search bar horizontally */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    overflow: hidden; /* Ensure rounded corners are applied */
-  }
-  
-  /* Search Input Field */
-  .search-input {
-    flex-grow: 1; /* Make the input take up available space */
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    outline: none; /* Remove focus outline */
-  }
-  
-  /* Search Button */
-  .search-button {
-    padding: 10px 15px;
-    background-color: #2196F3;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .search-button:hover {
-    background-color: #0b7dda; /* Darker blue on hover */
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+  margin: 10px auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  overflow: hidden;
+}
 
+.search-input {
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  outline: none;
+}
+
+.search-button {
+  padding: 10px 15px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background-color: #0b7dda;
+}

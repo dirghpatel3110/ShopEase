@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import '../CSS/Navbar.css';
-import cart_icon from '../Assets/cart_icon.png';
-import axios from 'axios';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import "../CSS/Navbar.css";
+import cart_icon from "../Assets/cart_icon.png";
+import axios from "axios";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const [role, setRole] = useState('');
-  const [activeLink, setActiveLink] = useState('');
+  const [role, setRole] = useState("");
+  const [activeLink, setActiveLink] = useState("");
   const [showInventoryOptions, setShowInventoryOptions] = useState(false);
   const [showSalesReportOptions, setShowSalesReportOptions] = useState(false);
-  const [showCustomerServiceOptions, setShowCustomerServiceOptions] = useState(false);
-  const [searchInput, setSearchInput] = useState('');
+  const [showCustomerServiceOptions, setShowCustomerServiceOptions] =
+    useState(false);
+  const [searchInput, setSearchInput] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedRole = localStorage.getItem('role');
+    const storedRole = localStorage.getItem("role");
 
     if (storedRole) {
       setRole(storedRole);
@@ -52,82 +53,83 @@ const Navbar = () => {
   };
 
   const inventoryOptions = [
-    { name: 'Products Available', path: '/inventory/available' },
-    { name: 'Bar Chart', path: '/inventory/bar-chart' },
-    { name: 'Products on Sale', path: '/inventory/on-sale' },
-    { name: 'Products with Manufacturer Rebates', path: '/inventory/rebates' }
+    { name: "Products Available", path: "/inventory/available" },
+    { name: "Bar Chart", path: "/inventory/bar-chart" },
+    { name: "Products on Sale", path: "/inventory/on-sale" },
+    { name: "Products with Manufacturer Rebates", path: "/inventory/rebates" },
   ];
 
   const salesReportOptions = [
-    { name: 'Product Sold', path: '/sales-report/product-sold' },
-    { name: 'Bar Chart', path: '/sales-report/bar-chart' },
-    { name: 'Daily Sales Transactions', path: '/sales-report/daily-transactions' }
+    { name: "Product Sold", path: "/sales-report/product-sold" },
+    { name: "Bar Chart", path: "/sales-report/bar-chart" },
+    {
+      name: "Daily Sales Transactions",
+      path: "/sales-report/daily-transactions",
+    },
   ];
 
   const customerServiceOptions = [
-    { name: 'Open a Ticket', path: '/customer-service/open-ticket' },
-    { name: 'Status of a Ticket', path: '/customer-service/ticket-status' }
+    { name: "Open a Ticket", path: "/customer-service/open-ticket" },
+    { name: "Status of a Ticket", path: "/customer-service/ticket-status" },
   ];
 
   const handleSearchChange = (e) => {
     setSearchInput(e.target.value);
   };
 
-  // Handle search button click
   const handleSearchSubmit = async () => {
     if (!searchInput.trim()) {
-      alert('Please enter a search query.');
+      alert("Please enter a search query.");
       return;
     }
-  
+
     try {
       console.log(`Searching for: ${searchInput}`);
-  
-      // Make a GET request to the backend API
-      const response = await axios.get('http://localhost:5001/api/auth/search', {
-        params: { query: searchInput },
-      });
-  
-      // Navigate to the Product page with search results
-      navigate('/product', { state: { searchResults: response.data.results } });
-      
+      const response = await axios.get(
+        "http://localhost:5001/api/auth/search",
+        {
+          params: { query: searchInput },
+        }
+      );
+
+      navigate("/product", { state: { searchResults: response.data.results } });
     } catch (error) {
-      console.error('Error during search:', error);
-      alert('Failed to perform search. Please try again.');
+      console.error("Error during search:", error);
+      alert("Failed to perform search. Please try again.");
     }
-  }; 
+  };
   return (
-    <div className='navbar'>
+    <div className="navbar">
       <div className="nav-logo">
         <Link to="/product">
           <p>𝒮𝒽𝑜𝓅𝐸𝒶𝓈𝑒</p>
         </Link>
       </div>
       <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchInput}
-            onChange={handleSearchChange}
-            className="search-input"
-          />
-          <button onClick={handleSearchSubmit} className="search-button">
-            Search
-          </button>
-        </div>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchInput}
+          onChange={handleSearchChange}
+          className="search-input"
+        />
+        <button onClick={handleSearchSubmit} className="search-button">
+          Search
+        </button>
+      </div>
       <div className="nav-login-cart">
         {role === "Salesman" && (
           <button
-            onClick={() => handleClick('/order')}
+            onClick={() => handleClick("/order")}
             style={{
-              color: activeLink === '/order' ? 'blue' : '#515151',
+              color: activeLink === "/order" ? "blue" : "#515151",
             }}
           >
             <Link
-              to='/order'
+              to="/order"
               style={{
-                color: activeLink === '/order' ? 'blue' : '#515151',
-                textDecoration: 'none',
+                color: activeLink === "/order" ? "blue" : "#515151",
+                textDecoration: "none",
               }}
             >
               Customer
@@ -137,16 +139,16 @@ const Navbar = () => {
         {role === "StoreManager" && (
           <>
             <button
-              onClick={() => handleClick('/product-list')}
+              onClick={() => handleClick("/product-list")}
               style={{
-                color: activeLink === '/product-list' ? 'blue' : '#515151',
+                color: activeLink === "/product-list" ? "blue" : "#515151",
               }}
             >
               <Link
-                to='/product-list'
+                to="/product-list"
                 style={{
-                  color: activeLink === '/product-list' ? 'blue' : '#515151',
-                  textDecoration: 'none',
+                  color: activeLink === "/product-list" ? "blue" : "#515151",
+                  textDecoration: "none",
                 }}
               >
                 Product list
@@ -162,8 +164,8 @@ const Navbar = () => {
                       to={option.path}
                       onClick={() => handleClick(option.path)}
                       style={{
-                        color: activeLink === option.path ? 'blue' : '#515151',
-                        textDecoration: 'none',
+                        color: activeLink === option.path ? "blue" : "#515151",
+                        textDecoration: "none",
                       }}
                     >
                       {option.name}
@@ -182,8 +184,8 @@ const Navbar = () => {
                       to={option.path}
                       onClick={() => handleClick(option.path)}
                       style={{
-                        color: activeLink === option.path ? 'blue' : '#515151',
-                        textDecoration: 'none',
+                        color: activeLink === option.path ? "blue" : "#515151",
+                        textDecoration: "none",
                       }}
                     >
                       {option.name}
@@ -196,46 +198,48 @@ const Navbar = () => {
         )}
         {role === "Customer" && (
           <>
-          <button
-            onClick={() => handleClick('/order')}
-            style={{
-              color: activeLink === '/order' ? 'blue' : '#515151',
-            }}
-          >  
-            <Link
-              to='/order'
+            <button
+              onClick={() => handleClick("/order")}
               style={{
-                color: activeLink === '/order' ? 'blue' : '#515151',
-                textDecoration: 'none',
+                color: activeLink === "/order" ? "blue" : "#515151",
               }}
             >
-              Order
-            </Link>
-          </button>
-          <div className="customer-service-dropdown">
-          <button onClick={toggleCustomerServiceOptions}>Customer Service</button>
-          {showCustomerServiceOptions && (
-            <div className="customer-service-options">
-              {customerServiceOptions.map((option, index) => (
-                <Link
-                  key={index}
-                  to={option.path}
-                  onClick={() => handleClick(option.path)}
-                  style={{
-                    color: activeLink === option.path ? 'blue' : '#515151',
-                    textDecoration: 'none',
-                  }}
-                >
-                  {option.name}
-                </Link>
-              ))}
+              <Link
+                to="/order"
+                style={{
+                  color: activeLink === "/order" ? "blue" : "#515151",
+                  textDecoration: "none",
+                }}
+              >
+                Order
+              </Link>
+            </button>
+            <div className="customer-service-dropdown">
+              <button onClick={toggleCustomerServiceOptions}>
+                Customer Service
+              </button>
+              {showCustomerServiceOptions && (
+                <div className="customer-service-options">
+                  {customerServiceOptions.map((option, index) => (
+                    <Link
+                      key={index}
+                      to={option.path}
+                      onClick={() => handleClick(option.path)}
+                      style={{
+                        color: activeLink === option.path ? "blue" : "#515151",
+                        textDecoration: "none",
+                      }}
+                    >
+                      {option.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        </>
+          </>
         )}
         <button onClick={handleLogout}>Logout</button>
-        <Link to='/cart'>
+        <Link to="/cart">
           <img src={cart_icon} alt="cart_icon" />
         </Link>
       </div>

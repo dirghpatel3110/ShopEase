@@ -29,7 +29,6 @@ export default function Order() {
   });
 
   useEffect(() => {
-    // Get user role and email from local storage
     const storedRole = localStorage.getItem("role");
     const email = localStorage.getItem("email");
 
@@ -48,7 +47,6 @@ export default function Order() {
         return;
       }
 
-      // Fetch order items for a specific customer using email
       axios
         .get(`http://localhost:5001/api/auth/user-orders?email=${email}`)
         .then((response) => {
@@ -65,7 +63,6 @@ export default function Order() {
           setLoading(false);
         });
     } else if (storedRole === "Salesman") {
-      // Fetch all order items for Salesman
       axios
         .get("http://localhost:5001/api/auth/order-items")
         .then((response) => {
@@ -88,9 +85,12 @@ export default function Order() {
     axios
       .delete(`http://localhost:5001/api/auth/transactions/${orderId}`)
       .then((response) => {
-        // Update the product list after removal
-        setProducts(products.filter((product) => product.transactionId?.orderId !== orderId));
-        cancelRemove(); // Close the popup after successful removal
+        setProducts(
+          products.filter(
+            (product) => product.transactionId?.orderId !== orderId
+          )
+        );
+        cancelRemove();
       })
       .catch((error) => {
         console.error("Error removing order:", error);
@@ -98,26 +98,23 @@ export default function Order() {
       });
   };
 
-  // Open the remove confirmation popup
   const handleOpenRemovePop = (orderId) => {
-    setOrderToRemove(orderId); // Set the order ID to be removed
-    setShowConfirmPop(true); // Show the confirmation popup
+    setOrderToRemove(orderId);
+    setShowConfirmPop(true);
   };
 
-  // Cancel the remove process and close the popup
   const cancelRemove = () => {
-    setShowConfirmPop(false); // Hide the confirmation popup
-    setOrderToRemove(null); // Reset the order ID to be removed
+    setShowConfirmPop(false);
+    setOrderToRemove(null);
   };
   const handleUpdate = (orderId, newStatus) => {
-    const updateUrl = `http://localhost:5001/api/auth/transactions/${orderId}`; // Use orderId in the URL
+    const updateUrl = `http://localhost:5001/api/auth/transactions/${orderId}`;
 
     axios
       .put(updateUrl, {
-        orderStatus: newStatus, // Pass orderStatus in the request body
+        orderStatus: newStatus,
       })
       .then((response) => {
-        // Update the product list with the new status
         setProducts(
           products.map((product) =>
             product.orderId === orderId
@@ -135,14 +132,12 @@ export default function Order() {
       });
   };
 
-  // Open the update popup with the current order details
   const handleOpenUpdatePop = (orderId, currentStatus) => {
     setOrderToUpdate(orderId);
     setNewStatus(currentStatus);
     setShowUpdatePop(true);
   };
 
-  // Cancel the update process and close the popup
   const cancelUpdate = () => {
     setShowUpdatePop(false);
     setOrderToUpdate(null);
@@ -204,7 +199,6 @@ export default function Order() {
         </div>
       )}
       <div className="list-product1">
-        {/* Header Section */}
         <div className="listproduct-format-main1">
           <p>Customer Name</p>
           <p>Order ID</p>
@@ -222,7 +216,6 @@ export default function Order() {
           )}
         </div>
 
-        {/* Order Items */}
         {products.map((product) => (
           <div key={product.transactionId?.email} className="listproduct-item">
             <p>{product.transactionId?.name}</p>
@@ -235,7 +228,6 @@ export default function Order() {
 
             {role === "Salesman" ? (
               <>
-                {/* Update Order Button */}
                 <button
                   className="update-order"
                   onClick={() =>
@@ -248,27 +240,28 @@ export default function Order() {
                   Update Order
                 </button>
 
-                {/* Remove Button */}
                 <button
                   className="remove-button"
-                  onClick={() => handleOpenRemovePop(product.transactionId?.orderId)}
+                  onClick={() =>
+                    handleOpenRemovePop(product.transactionId?.orderId)
+                  }
                 >
                   Remove
                 </button>
               </>
             ) : (
               <>
-                {/* Customer View */}
                 <p>{product.transactionId?.orderStatus || "Pending"}</p>
                 {["Placed", "Shipped", "Delivered"].includes(
                   product.transactionId?.orderStatus
                 ) ? (
                   <p>No actions available</p>
                 ) : (
-                  /* Cancel Order Button */
                   <button
                     className="remove-button"
-                    onClick={() => handleOpenRemovePop(product.transactionId?.orderId)}
+                    onClick={() =>
+                      handleOpenRemovePop(product.transactionId?.orderId)
+                    }
                   >
                     Cancel
                   </button>
@@ -310,7 +303,6 @@ export default function Order() {
             <h3>Are you sure you want to remove this order?</h3>
             <p>Order ID: {orderToRemove}</p>
 
-            {/* Action Buttons */}
             <div className="popup-actions">
               <button onClick={() => handleRemove(orderToRemove)}>
                 Yes, Remove

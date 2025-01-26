@@ -24,7 +24,6 @@
     color: #d32f2f;
   }
   
-  /* Styles specific to the bar chart */
   .product-sales-chart .google-visualization-tooltip {
     border: none;
     border-radius: 4px;
@@ -44,7 +43,6 @@
     padding: 0;
   }
   
-  /* Responsive design */
   @media (max-width: 768px) {
     .product-sales-chart {
       padding: 10px;

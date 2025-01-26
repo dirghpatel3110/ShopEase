@@ -1,65 +1,63 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
-import '../CSS/ProductCard.css'; 
-import Navbar from './Navbar';
-import Chatbot from './Chatbot'; 
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import "../CSS/ProductCard.css";
+import Navbar from "./Navbar";
+import Chatbot from "./Chatbot";
 
 const Product = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Fetch products on component mount
   useEffect(() => {
-    // If searchResults exist in the location state, use them
     if (location.state && location.state.searchResults) {
       setFilteredProducts(location.state.searchResults);
     } else {
-      axios.get('http://localhost:5001/api/auth/products')
+      axios
+        .get("http://localhost:5001/api/auth/products")
         .then((response) => {
           setProducts(response.data);
           setFilteredProducts(response.data);
-          const uniqueCategories = [...new Set(response.data.map(product => product.category))];
+          const uniqueCategories = [
+            ...new Set(response.data.map((product) => product.category)),
+          ];
           setCategories(uniqueCategories);
         })
         .catch((error) => {
-          console.error('Error fetching products:', error);
+          console.error("Error fetching products:", error);
         });
     }
   }, [location.state]);
 
-  // Handle category filter change
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
 
-  // Navigate to trending page
   const handleTrendingButtonClick = () => {
-    navigate('/trending');
+    navigate("/trending");
   };
+  const displayedProducts =
+    selectedCategory === "All"
+      ? filteredProducts.filter((product) =>
+          product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : filteredProducts.filter(
+          (product) =>
+            product.category === selectedCategory &&
+            product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
 
-  // Filter displayed products based on category and search term
-  const displayedProducts = selectedCategory === 'All' 
-    ? filteredProducts.filter(product => 
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : filteredProducts.filter(product => 
-        product.category === selectedCategory && 
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-
-  // Handle product click to navigate to the product details page
   const handleProductClick = async (product) => {
     try {
-      // Fetch product data from the API using axios
-      const response = await axios.get(`http://localhost:5001/api/auth/products/${product.id}`);
-  
-      // Navigate to the new route with the fetched product data
+      const response = await axios.get(
+        `http://localhost:5001/api/auth/products/${product.id}`
+      );
+
       navigate(`/product/${product.id}`, { state: { product: response.data } });
     } catch (error) {
       console.error("Error fetching product data:", error);
@@ -68,13 +66,13 @@ const Product = () => {
 
   return (
     <>
-      <Navbar/>
-      <Chatbot/>
+      <Navbar />
+      <Chatbot />
       <div className="product-container">
         <div className="set-btn">
           <div className="category-filter">
             <label htmlFor="category">Filter by category:</label>
-            <select 
+            <select
               id="category"
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
@@ -85,7 +83,7 @@ const Product = () => {
                   {category}
                 </option>
               ))}
-            </select>  
+            </select>
           </div>
         </div>
 
@@ -96,16 +94,22 @@ const Product = () => {
         <div className="product-grid">
           {displayedProducts.length > 0 ? (
             displayedProducts.map((product) => (
-              <div 
-                key={product.id} 
-                className="product-card" 
-                onClick={() => handleProductClick(product)} 
-                style={{ cursor: 'pointer' }}
+              <div
+                key={product.id}
+                className="product-card"
+                onClick={() => handleProductClick(product)}
+                style={{ cursor: "pointer" }}
               >
-                <img className="product-image" src={product.image} alt=" Product image" />
+                <img
+                  className="product-image"
+                  src={product.image}
+                  alt=" Product image"
+                />
                 <div className="product-info">
                   <h3>{product.name || product.ProductModelName}</h3>
-                  <p className='price'>Price: ${product.price || product.ProductPrice}</p>
+                  <p className="price">
+                    Price: ${product.price || product.ProductPrice}
+                  </p>
                   <p>Category: {product.category || product.ProductCategory}</p>
                 </div>
               </div>
@@ -115,7 +119,7 @@ const Product = () => {
           )}
         </div>
       </div>
-      </>
+    </>
   );
 };
 
