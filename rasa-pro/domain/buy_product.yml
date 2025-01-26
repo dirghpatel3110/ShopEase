@@ -1,28 +1,73 @@
+# version: "3.1"
+
+# slots:
+
+#   productName:
+#     type: text
+#     mappings:
+#       - type: from_llm
+
+# responses:
+  
+#   # Responses for buying a product and fetching top products
+#   utter_confirm_buying_product:
+#     - text: "Thank you! Let me fetch the top 5 products for you."
+
+#   utter_top_products:
+#     - text: "Here are the top 5 products: {products}."
+
+#   utter_ask_productName:
+#     - text: "What product are you looking to buy?"
+
+# forms:
+#   buy_product:
+#     required_slots:
+#       - productName
+
+# actions:
+#   - action_get_top_products
+
+
+
 version: "3.1"
 
 slots:
-
   productName:
     type: text
     mappings:
       - type: from_llm
 
+  selectedProduct:
+    type: text
+    mappings:
+      - type: from_llm
+
+  quantity:
+    type: text
+    mappings:
+      - type: from_llm
+
 responses:
-  
   # Responses for buying a product and fetching top products
-  utter_confirm_buying_product:
-    - text: "Thank you! Let me fetch the top 5 products for you."
-
-  utter_top_products:
-    - text: "Here are the top 5 products: {products}."
-
   utter_ask_productName:
     - text: "What product are you looking to buy?"
+
+  utter_ask_selectedProduct:
+    - text: "Which product would you like to select? Please provide the name or number from the list."
+
+  utter_ask_quantity:
+    - text: "How many units of {selectedProduct} would you like to buy?"
+
+  utter_confirm_cart:
+    - text: "Thank you! {quantity} units of {selectedProduct} have been added to your cart."
+
+actions:
+  - action_get_top_products
+  - action_store_cart
 
 forms:
   buy_product:
     required_slots:
       - productName
-
-actions:
-  - action_get_top_products
+      - selectedProduct
+      - quantity

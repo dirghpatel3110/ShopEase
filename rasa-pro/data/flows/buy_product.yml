@@ -1,7 +1,20 @@
+# flows:
+#   buy_product:
+#       name: Buy Product and Get Top 5 Products
+#       description: Flow to handle user requests for buying a product and fetching the top 5 products.
+#       steps:
+#         # Step 1: Collect the productName slot
+#         - collect: productName
+#         - action: utter_ask_productName
+
+#         # Step 2: Execute custom action to fetch and display the top 5 products
+#         - action: action_get_top_products
+
+
 flows:
   buy_product:
       name: Buy Product and Get Top 5 Products
-      description: Flow to handle user requests for buying a product and fetching the top 5 products.
+      description: Flow to handle user requests for buying a product, selecting one, specifying quantity, and storing it in the database.
       steps:
         # Step 1: Collect the productName slot
         - collect: productName
@@ -9,3 +22,17 @@ flows:
 
         # Step 2: Execute custom action to fetch and display the top 5 products
         - action: action_get_top_products
+
+        # Step 3: Collect selectedProduct slot (user selects a product from the list)
+        - collect: selectedProduct
+        - action: utter_ask_selectedProduct
+
+        # Step 4: Collect quantity slot (ask how many quantities)
+        - collect: quantity
+        - action: utter_ask_quantity
+
+        # Step 5: Execute custom action to store product and quantity in MongoDB
+        - action: action_store_cart
+
+        # Step 6: Confirm to the user that the product has been added to their cart
+        - action: utter_confirm_cart
