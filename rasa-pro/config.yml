@@ -1,16 +1,10 @@
 recipe: default.v1
 language: en
 pipeline:
-  # - name: WhitespaceTokenizer
-  # - name: CountVectorsFeaturizer
-  # - name: DIETClassifier
-  # - name: EntitySynonymMapper
-  # - name: ResponseSelector
   - name: NLUCommandAdapter
   - name: SingleStepLLMCommandGenerator
     llm:
       model: gpt-4o-mini
-      # model_group: openai-gpt-4
 
 policies:
   - name: FlowPolicy

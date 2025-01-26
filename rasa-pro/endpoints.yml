@@ -50,15 +50,6 @@ nlg:
 action_endpoint:
   url: "http://localhost:5055/webhook"
 
-# model_groups:
-#   - id: openai-gpt-4o-mini
-#     models:
-#       - provider: openai
-#         model: gpt-4o-mini
-#         request_timeout: 7
-#         api_key: "${OPENAI_API_KEY}" 
-#         max_tokens: 256
-
 vector_store:
   type: milvus
   host: localhost

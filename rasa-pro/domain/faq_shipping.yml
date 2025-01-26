@@ -10,8 +10,6 @@ slots:
     type: text
 
 responses:
-  # utter_ask_orderId:
-  #   - text: "Can you please provide your order ID?"
 
   utter_confirm_checking_shipping:
     - text: "Thank you! Let me check the shipping date of your order."

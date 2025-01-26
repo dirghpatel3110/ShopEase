@@ -1,6 +1,3 @@
-# milvus_utils.py
-# Utility classes for Milvus operations
-
 class MilvusConnector:
     def __init__(self, host="localhost", port="19530", collection_name="rasa"):
         from pymilvus import connections, utility, Collection
